@@ -1,0 +1,15 @@
+projects:
+  - title: TPO
+    description: Databases TPO
+    services:
+      - name: api_service
+        type: BE
+
+      - name: raspberry
+        type: BE
+
+      - name: database
+        type: DB
+
+docker_compose_files:
+  - /Users/asmazzeo/Documents/UTN/BaseDeDatos/TPO/ServiceTPO/docker/docker-compose.yml

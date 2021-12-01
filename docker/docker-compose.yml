@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+  api_service:
+    container_name: api_service
+    image: tpo_api_service:1.0.0
+    restart: always
+    build:
+      context: ../../BackTPO
+      dockerfile: Dockerfile
+    working_dir: /app
+    ports:
+      - 8000:8000
+    command: "bash -c 'python -m pip install -e . && gunicorn -w 1 -b 0.0.0.0:8000 --reload app.api:app'"
+    volumes:
+      - ../../BackTPO:/app
+
+  raspberry:
+    container_name: raspberry
+    image: tpo_router:1.0.0
+    restart: always
+    build:
+      context: ../../RouterTPO
+      dockerfile: Dockerfile
+    working_dir: /app
+    ports:
+     - 8001:8001
+    command: "bash -c 'python3.9 -m pip install -e . && start_router'"
+    volumes:
+     - ../../RouterTPO:/app
+
+  database:
+    container_name: database
+    image: mariadb:10.6.4
+    restart: always
+    working_dir: /app
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MARIADB_DATABASE: TPO
+      MYSQL_USER: amazzeo
+      MYSQL_PASSWORD: amazzeo
+    volumes:
+      - ../data:/var/lib/mysql
+      - ./database/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./database/populate_tables.sql:/app/populate_tables.sql
