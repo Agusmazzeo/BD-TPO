@@ -42,3 +42,4 @@ services:
       - ../data:/var/lib/mysql
       - ./database/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
       - ./database/populate_tables.sql:/app/populate_tables.sql
+      - ./database/full_backup.sql:/app/full_backup.sql
